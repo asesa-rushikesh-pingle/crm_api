@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "u482708547_prathmesh",
-    "password": "eAU55V8s@",
-    "database": "u482708547_demoapi",
-    "host": "asesadigital.com",
+    "username": "xxmcdhai_demouser",
+    "password": "R&H&(@KYktv$",
+    "database": "xxmcdhai_demo",
+    "host": "wasantoyota.in",
     "dialect": "mysql"
   },
   "test": {
