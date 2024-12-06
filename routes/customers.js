@@ -41,11 +41,12 @@ router.get('/', function(req, res) {
 
     let query = {}
     if(search){
-        query.itemName = {[Op.substring] : search}
+        query.name = {[Op.substring] : search}
     }
 
+    
 
-    models.Stock.findAndCountAll({
+    models.Customer.findAndCountAll({
         where : query,
         limit : Number(limit),
         offset : (page - 1) * limit
@@ -53,11 +54,11 @@ router.get('/', function(req, res) {
     }).then(response=>{
         res.status(200).json({
             "status":true,
-            "msg":"stock found!!",
-            "stock":response.rows,
+            "msg":"customers found!!",
+            "customers":response.rows,
             "pagination":{
                 "curPage": Number(page),
-                "totalPages": Math.ceil(response.count / Number(limit)) ,
+                "totalPages": Math.ceil(response.count / Number(limit)) , 
                 "total" : response.count
             }
         })
