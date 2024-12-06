@@ -73,28 +73,24 @@ router.get('/', function(req, res) {
 });
 
 
-/* Create stock. */
+/* Update customer. */
 router.post('/update', function(req, res) {
 
     const {id} = req.query
 
-    let stock = {
-        itemName: req.body.itemName,
-        itemType: req.body.itemType,
-        itemGroup: req.body.itemGroup,
-        itemWeight: req.body.itemWeight,
-        stoneWeight: req.body.stoneWeight,
-        finalWeight: req.body.finalWeight,
-        stock: req.body.stock,
-        sellBy: req.body.sellBy,
-        uom: req.body.uom
+    let customer = {
+        name: req.body.name,
+        address: req.body.address,
+        mobile: req.body.mobile,
+        email: req.body.email,
+        pendingAmount: req.body.pendingAmount,
     }
 
-    models.Stock.update(stock,{where : {id : id}}).then(response=>{
+    models.Customer.update(customer,{where : {id : id}}).then(response=>{
         res.status(200).json({
             "status":true,
-            "msg":"stock updated successfully",
-            "stock":stock
+            "msg":"customer updated successfully",
+            "stock":customer
         })
     }).catch(err=>{
         res.status(500).json({
@@ -107,14 +103,14 @@ router.post('/update', function(req, res) {
   
 });
 
-/* gte single  stock. */
+/* gte single  Customer. */
 router.get('/details', function(req, res) {
 
     const {id} = req.query
 
     
 
-    models.Stock.findByPk(id).then(response=>{
+    models.Customer.findByPk(id).then(response=>{
 
         if(!response){
             res.status(500).json({
@@ -124,8 +120,8 @@ router.get('/details', function(req, res) {
         }else{
             res.status(200).json({
                 "status":true,
-                "msg":"stock updated successfully",
-                "stock":response
+                "msg":"Customer Found successfully",
+                "customer":response
             })
         }
 
