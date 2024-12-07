@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 const models = require("../models");
 const { Op } = require('sequelize');
+const checkAuth =  require("../middleware/auth")
 
 /* Create stock. */
-router.post('/create', function(req, res) {
+router.post('/create' ,checkAuth, function(req, res) {
 
  
 
@@ -35,7 +36,7 @@ router.post('/create', function(req, res) {
 
 
 /* stock list. */
-router.get('/', function(req, res) {
+router.get('/',checkAuth, function(req, res) {
 
     const {page = 1,limit = 10,search = ''} = req.query
 
@@ -74,7 +75,7 @@ router.get('/', function(req, res) {
 
 
 /* Create stock. */
-router.post('/update', function(req, res) {
+router.post('/update',checkAuth, function(req, res) {
 
     const {id} = req.query
 
@@ -108,7 +109,7 @@ router.post('/update', function(req, res) {
 });
 
 /* gte single  stock. */
-router.get('/details', function(req, res) {
+router.get('/details',checkAuth, function(req, res) {
 
     const {id} = req.query
 

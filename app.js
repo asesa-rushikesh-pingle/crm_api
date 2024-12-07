@@ -24,12 +24,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
 
 // stocks api routes 
 app.use('/stocks', stockRouter);
 // customers routes 
 app.use('/customers', customerRouter);
+// user routes 
+app.use('/users', usersRouter);
 
 
 
