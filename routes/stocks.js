@@ -127,7 +127,7 @@ router.get('/details',checkauth, function(req, res) {
         }else{
             res.status(200).json({
                 "status":true,
-                "msg":"stock updated successfully",
+                "msg":"stock found successfully",
                 "stock":response
             })
         }
