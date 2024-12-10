@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var stockRouter = require('./routes/stocks');
 var customerRouter = require('./routes/customers');
+var billRouter = require('./routes/bills');
 
 var app = express();
 
@@ -32,6 +33,8 @@ app.use('/stocks', stockRouter);
 app.use('/customers', customerRouter);
 // user routes 
 app.use('/users', usersRouter);
+// billing routes 
+app.use('/bills', billRouter);
 
 
 

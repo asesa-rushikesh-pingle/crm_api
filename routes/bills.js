@@ -4,27 +4,25 @@ const models = require("../models");
 const { Op } = require('sequelize');
 const checkauth = require('../middleware/auth');
 
-/* Create stock. */
+/* Create bill. */
 router.post('/create',checkauth, function(req, res) {
 
 
-    let stock = {
-        itemName: req.body.itemName,
-        itemType: req.body.itemType,
-        itemGroup: req.body.itemGroup,
-        itemWeight: req.body.itemWeight,
-        stoneWeight: req.body.stoneWeight,
-        finalWeight: req.body.finalWeight,
-        stock: req.body.stock,
-        sellBy: req.body.sellBy,
-        uom: req.body.uom
+    let bill = {
+        "customerId": req.body.customerId,
+    "subTotal": req.body.subTotal,
+    "oldSubTotal": req.body.oldSubTotal,
+    "discount": req.body.discount,
+    "finalTotal": req.body.finalTotal,
+    "amountPaid": req.body.amountPaid,
+    "remainingAmount": req.body.remainingAmount
     }
 
-    models.Stock.create(stock).then(response=>{
+    models.Bill.create(bill).then(response=>{
         res.status(200).json({
             "status":true,
-            "msg":"stock created successfully",
-            "stock":stock
+            "msg":"bill created successfully",
+            "stock":response
         })
     }).catch(err=>{
         res.status(500).json({
@@ -111,37 +109,45 @@ router.post('/update',checkauth, function(req, res) {
 });
 
 /* gte single  stock. */
-router.get('/details',checkauth, function(req, res) {
+router.get('/details',checkauth, async function(req, res) {
 
     const {id} = req.query
 
+
+    const [results, metadata] = await models.sequelize.query(`SELECT *  FROM Bills  INNER JOIN Customers ON Customers.id = Bills.customerId WHERE Bills.id = ${id}`);
+
+    res.json({
+        "status": true,
+        "msg": "details found",
+        "data" : results
+    })
     
 
-    models.Stock.findByPk(id).then(response=>{
+    // models.Bill.findByPk(id).then(response=>{
 
 
 
-        if(!response){
-            res.status(500).json({
-                "status":false,
-                "msg":"Not found"
-            })
-        }else{
-            res.status(200).json({
-                "status":true,
-                "msg":"stock found successfully",
-                "stock":response
-            })
-        }
+    //     if(!response){
+    //         res.status(500).json({
+    //             "status":false,
+    //             "msg":"Not found"
+    //         })
+    //     }else{
+    //         res.status(200).json({
+    //             "status":true,
+    //             "msg":"bill found successfully",
+    //             "stock":response
+    //         })
+    //     }
 
        
-    }).catch(err=>{
-        res.status(500).json({
-            "status":false,
-            "msg":"something went wrong",
-            "errors":err
-        })
-    })
+    // }).catch(err=>{
+    //     res.status(500).json({
+    //         "status":false,
+    //         "msg":"something went wrong",
+    //         "errors":err
+    //     })
+    // })
 
   
 });

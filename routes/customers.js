@@ -111,7 +111,9 @@ router.get('/details',checkAuth, function(req, res) {
 
     
 
-    models.Customer.findByPk(id).then(response=>{
+    models.Customer.findByPk(id),{
+        include : [models.Bill]
+    }.then(response=>{
 
         if(!response){
             res.status(500).json({
