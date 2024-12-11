@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   BillNewItem.init({
+    billId: DataTypes.INTEGER,
     itemName: DataTypes.STRING,
     itemType: DataTypes.STRING,
     itemGroup: DataTypes.STRING,

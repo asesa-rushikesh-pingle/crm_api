@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 const checkauth = require('../middleware/auth');
 
 /* Create bill. */
-router.post('/create',checkauth, function(req, res) {
+router.post('/create',checkauth,  function(req, res) {
 
 
     let bill = {
@@ -18,18 +18,52 @@ router.post('/create',checkauth, function(req, res) {
     "remainingAmount": req.body.remainingAmount
     }
 
+    let itemms = req.body.items
+    
     models.Bill.create(bill).then(response=>{
-        res.status(200).json({
-            "status":true,
-            "msg":"bill created successfully",
-            "stock":response
-        })
+        
+
+     itemms.forEach(element => {
+
+            models.BillNewItem.create({
+                billId : response.id,
+                itemName: element.itemName,
+                itemType: element.itemType,
+                itemGroup: element.itemGroup,
+                rate: element.rate,
+                weight: element.weight,
+                qty: element.qty,
+                makingAmount: element.makingAmount,
+                total: element.total
+            }).then(respo => {
+
+            }).catch(err=>{
+                console.log(err)
+                res.status(500).json({
+                    "status":false,
+                    "msg":"something went wrong",
+                    "errors":err
+                })
+                return
+            })
+            
+        });
+
+
+            res.status(200).json({
+                "status":true,
+                "msg":"bill created successfully",
+                "bill":response
+            }) 
+
+       
     }).catch(err=>{
         res.status(500).json({
             "status":false,
             "msg":"something went wrong",
             "errors":err
         })
+        console.log(err)
     })
 
   
@@ -114,12 +148,15 @@ router.get('/details',checkauth, async function(req, res) {
     const {id} = req.query
 
 
-    const [results, metadata] = await models.sequelize.query(`SELECT *  FROM Bills  INNER JOIN Customers ON Customers.id = Bills.customerId WHERE Bills.id = ${id}`);
+    const [results, metadata] = await models.sequelize.query(`SELECT Bills.id as bill_id,Bills.*,Customers.*,Customers.id as customer_id  FROM Bills  INNER JOIN Customers ON Customers.id = Bills.customerId WHERE Bills.id = ${id}`);
+
+    const [itesmm, itemssmetadata] = await models.sequelize.query(`SELECT * FROM BillNewItems  WHERE BillNewItems.billId = ${id}`);
 
     res.json({
         "status": true,
         "msg": "details found",
-        "data" : results
+        "data" : results,
+        "items":itesmm
     })
     
 
