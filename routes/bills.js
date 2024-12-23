@@ -10,6 +10,8 @@ const path = require('path');
 /* Create bill. */
 router.post('/create', checkauth, async function (req, res) {
 
+    
+
 
     let bill = {
         "customerId": req.body.customerId,

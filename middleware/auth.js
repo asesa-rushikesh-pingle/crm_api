@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 function checkauth(req, res, next) {
     try {
 
+
         let tokenn = req.headers.authorization.split(" ")[1]
 
         var decoded = jwt.verify(tokenn, 'rushi');

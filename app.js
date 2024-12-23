@@ -29,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'pdfs')));
 app.use('/', indexRouter);
 
 
+
+
 // stocks api routes 
 app.use('/stocks', stockRouter);
 // customers routes 
