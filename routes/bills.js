@@ -562,7 +562,7 @@ router.post('/create', checkauth, async function (req, res) {
 
 
 /* stock list. */
-router.get('/', checkauth, function (req, res) {
+router.get('/', checkauth, async function (req, res) {
 
     const { page = 1, limit = 10, search = '' } = req.query
 
@@ -570,6 +570,23 @@ router.get('/', checkauth, function (req, res) {
     if (search) {
         query.itemName = { [Op.substring]: search }
     }
+
+
+//     SELECT *
+//         FROM your_table
+// WHERE your_search_column LIKE '%search_term%'
+// ORDER BY your_sort_column
+// LIMIT 10 OFFSET 0;
+
+const [billList, metadata]  = await models.sequelize.query(`SELECT Bills.id as bill_id, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
+
+res.status(200).json({
+    "status": true,
+    "message": "bills found successfully",
+    "bills":billList
+})
+
+return
 
 
     models.Stock.findAndCountAll({
