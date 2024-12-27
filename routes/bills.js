@@ -572,46 +572,26 @@ router.get('/', checkauth, async function (req, res) {
     }
 
 
-//     SELECT *
-//         FROM your_table
-// WHERE your_search_column LIKE '%search_term%'
-// ORDER BY your_sort_column
-// LIMIT 10 OFFSET 0;
+    try {
 
-const [billList, metadata]  = await models.sequelize.query(`SELECT Bills.id as bill_id, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
+        const [billList, metadata] = await models.sequelize.query(`SELECT Bills.id as bill_id, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
 
-res.status(200).json({
-    "status": true,
-    "message": "bills found successfully",
-    "bills":billList
-})
-
-return
-
-
-    models.Stock.findAndCountAll({
-        where: query,
-        limit: Number(limit),
-        offset: (page - 1) * limit
-
-    }).then(response => {
         res.status(200).json({
             "status": true,
-            "msg": "stock found!!",
-            "stock": response.rows,
-            "pagination": {
-                "curPage": Number(page),
-                "totalPages": Math.ceil(response.count / Number(limit)),
-                "total": response.count
-            }
+            "message": "bills found successfully",
+            "bills": billList
         })
-    }).catch(err => {
+
+    } catch (error) {
         res.status(500).json({
             "status": false,
             "msg": "something went wrong",
-            "errors": err
+            "errors": error
         })
-    })
+
+    }
+
+
 
 });
 
