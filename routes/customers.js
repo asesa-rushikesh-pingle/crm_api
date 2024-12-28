@@ -122,7 +122,7 @@ router.get('/details', checkAuth, async function (req, res) {
 
             customerObj.dataValues.orders = ordersArr
             res.status(200).json({
-                "status": false,
+                "status": true,
                 "msg": "User found successfully",
                 "customer": customerObj.dataValues
             })

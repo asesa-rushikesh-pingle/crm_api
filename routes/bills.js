@@ -440,7 +440,7 @@ router.post('/create', checkauth, async function (req, res) {
     </html>`
 
         var options = {
-            format: "A5",
+            format: "A4",
             orientation: "portrait",
             border: "0mm"
         };
@@ -489,6 +489,28 @@ router.post('/create', checkauth, async function (req, res) {
                         })
                     });
 
+                    // stock update start 
+
+
+                    await itemms.forEach(async element => {
+                        let fetchedStock = await models.Stock.findByPk(element.id)
+                        let stockRespo =  await models.Stock.update({...fetchedStock,stock : Number(fetchedStock.stock) - Number(element.qty)},{where : {id : element.id}})
+                    });
+
+                    // stock update end
+
+                    // customer pending amount update start 
+                     let custoRespo  =  await models.Customer.update({"pendingAmount" : bill.remainingAmount}, { where: { id: bill.customerId } })
+                     if(custoRespo){
+                         console.log("customer updated !!!")
+                     }
+
+                    // customer pending amount update end  
+
+
+
+
+
                     if (olditemms.length > 0) {
                         await olditemms.forEach(async element => {
                             let billOldItemRespo = await models.BillOldItem.create({
@@ -511,6 +533,9 @@ router.post('/create', checkauth, async function (req, res) {
 
 
                     } else {
+
+
+
                         res.status(200).json({
                             "status": true,
                             "msg": "bill generated successfully",
