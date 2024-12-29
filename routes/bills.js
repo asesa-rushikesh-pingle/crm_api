@@ -26,6 +26,12 @@ router.post('/create', checkauth, async function (req, res) {
         let itemms = req.body.items
         let olditemms = req.body.olditems
 
+        let custoDetails = {
+            "name" : req.body.customerName,
+            "mobile" : req.body.customerMobile,
+            "date" : req.body.date
+        }
+
 
         let htmlll = `<!DOCTYPE html>
     <html lang="en">
@@ -42,7 +48,7 @@ router.post('/create', checkauth, async function (req, res) {
             .invoice {
     
                 border: 3px double rgb(124, 124, 124);
-                width: 540px;
+                width: 580px;
                 height: 750px;
                 padding: 10px;
             }
@@ -197,7 +203,7 @@ router.post('/create', checkauth, async function (req, res) {
                      <div class="bilNo">
                 
                     <div class="val">
-                        ${new Date().toISOString().slice(0, 10)}
+                         {{custoDetails.date}}
                     </div>
                 </div>
                     </td>
@@ -212,7 +218,7 @@ router.post('/create', checkauth, async function (req, res) {
                         Name:
                     </div>
                     <div class="val">
-                        Customer Name here
+    {{custoDetails.name}}
                     </div>
                 </div>
                
@@ -223,7 +229,7 @@ router.post('/create', checkauth, async function (req, res) {
                         Mobile:
                     </div>
                     <div class="val">
-                        Customer mobile
+                        {{custoDetails.mobile}}
                     </div>
                 </div>
                
@@ -452,7 +458,8 @@ router.post('/create', checkauth, async function (req, res) {
             data: {
                 itemms: itemms,
                 olditemms: olditemms,
-                bill: bill
+                bill: bill,
+                custoDetails : custoDetails
             },
             path: `./pdfs/${fileName}`,
             type: "",
@@ -463,6 +470,7 @@ router.post('/create', checkauth, async function (req, res) {
         if (pdfResponse) {
 
             const billRespo = await models.Bill.create({
+                fileName : fileName,
                 customerId: bill.customerId,
                 subTotal: bill.subTotal,
                 oldSubTotal: bill.oldSubTotal,
@@ -599,7 +607,7 @@ router.get('/', checkauth, async function (req, res) {
 
     try {
 
-        const [billList, metadata] = await models.sequelize.query(`SELECT Bills.id as bill_id, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
+        const [billList, metadata] = await models.sequelize.query(`SELECT Bills.id as bill_id, Bills.fileName, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
 
         res.status(200).json({
             "status": true,

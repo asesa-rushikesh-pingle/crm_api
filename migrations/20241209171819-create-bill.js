@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      fileName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       subTotal: {
         type: Sequelize.FLOAT,
         allowNull: false,
