@@ -23,6 +23,27 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      companyName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      address: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      mbileNo: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      bankName: {
+        type: Sequelize.STRING,
+      },
+      accountNo: {
+        type: Sequelize.STRING,
+      },
+      IFSCCode: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

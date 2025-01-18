@@ -10,6 +10,7 @@ router.post('/create', checkAuth, function (req, res) {
 
 
     let customer = {
+        authId: req.authId,
         name: req.body.name,
         address: req.body.address,
         mobile: req.body.mobile,
@@ -41,6 +42,7 @@ router.get('/', checkAuth, function (req, res) {
     const { page = 1, limit = 10, search = '' } = req.query
 
     let query = {}
+    query.authId = req.authId 
     if (search) {
         query.name = { [Op.substring]: search }
     }

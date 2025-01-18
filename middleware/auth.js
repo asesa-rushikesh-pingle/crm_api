@@ -10,6 +10,8 @@ function checkauth(req, res, next) {
         console.log("decoded", decoded)
 
         if (decoded) {
+            console.log("decoded",decoded)
+            req.authId = decoded.id
             next()
         } else {
             res.status(500).json({

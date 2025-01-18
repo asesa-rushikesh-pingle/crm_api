@@ -14,6 +14,7 @@ router.post('/create', checkauth, async function (req, res) {
 
         let bill = {
             "pending": req.body.pending,
+            "authId": req.authId,
             "customerId": req.body.customerId,
             "subTotal": req.body.subTotal,
             "oldSubTotal": req.body.oldSubTotal,
@@ -471,6 +472,7 @@ router.post('/create', checkauth, async function (req, res) {
 
             const billRespo = await models.Bill.create({
                 fileName : fileName,
+                authId: bill.authId,
                 customerId: bill.customerId,
                 subTotal: bill.subTotal,
                 oldSubTotal: bill.oldSubTotal,
@@ -513,7 +515,7 @@ router.post('/create', checkauth, async function (req, res) {
                          console.log("customer updated !!!")
                      }
 
-                    // customer pending amount update end  
+                    // customer pending amount update end
 
 
 
@@ -607,7 +609,7 @@ router.get('/', checkauth, async function (req, res) {
 
     try {
 
-        const [billList, metadata] = await models.sequelize.query(`SELECT Bills.id as bill_id, Bills.fileName, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
+        const [billList, metadata] = await models.sequelize.query(`SELECT Bills.id as bill_id, Bills.authId, Bills.fileName, Customers.id as customer_id, Customers.name as customer_name, Bills.subTotal, Bills.oldSubTotal,Bills.discount,Bills.finalTotal,Bills.amountPaid,Bills.remainingAmount,Bills.createdAt FROM Bills INNER JOIN Customers ON Bills.CustomerId = Customers.id WHERE Bills.authId = ${req.authId} AND Customers.name LIKE '%${search}%' ORDER BY  Bills.id DESC LIMIT ${limit} OFFSET ${(Number(page) - 1) * limit}`);
 
         res.status(200).json({
             "status": true,

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Stock.init({
+    authId: DataTypes.INTEGER,
     itemName: DataTypes.STRING,
     itemType: DataTypes.STRING,
     itemGroup: DataTypes.STRING,

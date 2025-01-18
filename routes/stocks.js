@@ -9,6 +9,7 @@ router.post('/create',checkauth, function(req, res) {
 
 
     let stock = {
+        authId:req.authId,
         itemName: req.body.itemName,
         itemType: req.body.itemType,
         itemGroup: req.body.itemGroup,
@@ -41,9 +42,12 @@ router.post('/create',checkauth, function(req, res) {
 /* stock list. */
 router.get('/',checkauth, function(req, res) {
 
+
+
     const {page = 1,limit = 10,search = ''} = req.query
 
     let query = {}
+    query.authId = req.authId
     if(search){
         query.itemName = {[Op.substring] : search}
     }

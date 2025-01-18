@@ -12,7 +12,13 @@ router.post('/register', function (req, res) {
       let user = {
         userName: req.body.userName,
         userId: req.body.userId,
-        userPassword: hash
+        userPassword: hash,
+        companyName: req.body.companyName,
+        address: req.body.address,
+        mbileNo: req.body.mbileNo,
+        bankName: req.body.bankName,
+        accountNo: req.body.accountNo,
+        IFSCCode: req.body.IFSCCode
       }
 
       models.User.create(user).then((response) => {
@@ -50,15 +56,15 @@ router.post('/login', function (req, res) {
       bcrypt.compare(req.body.userPassword, response.userPassword, function (errr, ress) {
         if (ress) {
 
-          var token = jwt.sign({ userId: response.userId }, 'rushi');
+          var token = jwt.sign({ userId: response.userId , id:response.id }, 'rushi');
 
           res.status(200).json({
             "status": true,
             "msg": "User logged in successfully",
-            "token" : token
+            "token": token
           })
 
-        }else{
+        } else {
           res.status(500).json({
             "status": false,
             "msg": "User credentials mismatch"

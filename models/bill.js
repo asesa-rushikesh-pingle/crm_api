@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Bill.init({
+    authId: DataTypes.INTEGER,
     customerId: DataTypes.INTEGER,
     fileName: DataTypes.STRING,
     subTotal: DataTypes.FLOAT,
